@@ -1,5 +1,5 @@
 // https://leetcode.com/problems/linked-list-random-node/submissions/914580124/
-
+// Only Solution class definition is submitted to leetcode.
 #include <iostream>
 #include <cstdlib>
 
@@ -51,6 +51,7 @@ private:
  * int param_1 = obj->getRandom();
  */
 
+// main() function is used for testing solution obj.
 int main(){
     ListNode* head = new ListNode(1);
     ListNode* secNode = new ListNode(2);
