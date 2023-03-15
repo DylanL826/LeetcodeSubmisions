@@ -25,8 +25,7 @@ public:
         }
     }
     int getRandom() {
-        int index = rand() % values.size();
-        return values[index]->val;
+        return values[rand() % values.size()]->val;
     }
 private:    
     vector<ListNode*> values;
