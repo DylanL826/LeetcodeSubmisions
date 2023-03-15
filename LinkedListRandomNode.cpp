@@ -18,10 +18,10 @@ struct ListNode {
 class Solution {
 public:
     Solution(ListNode* head) {
-        ListNode* curNode = head;
-        while (curNode != nullptr){         
-            values.push_back(curNode);
-            curNode = curNode->next;
+        //ListNode* curNode = head;
+        while (head != nullptr){         
+            values.push_back(head);
+            head = head->next;
         }
     }
     int getRandom() {
