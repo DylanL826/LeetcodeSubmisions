@@ -2,6 +2,7 @@
 // Only Solution class definition is submitted to leetcode.
 #include <iostream>
 #include <cstdlib>
+#include <vector>
 
 using namespace std;
 
@@ -20,9 +21,9 @@ public:
         this->head = head;
         ListNode* curNode = head;
         //cout << "head address: " << head << endl;        
-        while (curNode != nullptr){
-            listLength++;            
+        while (curNode != nullptr){         
             //cout << curNode->val << endl;
+            values.push_back(curNode);
             curNode = curNode->next;
         }
         //cout << "(after) head address: " << head << endl;        
@@ -30,18 +31,12 @@ public:
     int getRandom() {
         //srand((unsigned) time(NULL));
         //cout << "head address from getRandom(): " << head << endl;
-        int index = rand() % listLength;
-        ListNode* curNode = head;
-        for (int i = 0; i < index; i++)
-        {
-            curNode = curNode->next;
-        }
-        cout << curNode->val << endl;
-        return curNode->val;
+        int index = rand() % values.size();
+        return values[index]->val;
     }
 private:
     ListNode* head = nullptr;
-    int listLength = 0;
+    vector<ListNode*> values;
     
 };
 
@@ -61,9 +56,11 @@ int main(){
     secNode->next = thirdNode;
     thirdNode->next = fourthNode;
     Solution* obj = new Solution(head);
+    int num = 0;
     for (int i = 0; i < 50; i++)
     {
-        obj->getRandom();
+        num = obj->getRandom();
+        cout << num << endl;
     }
     return 0;
 }
