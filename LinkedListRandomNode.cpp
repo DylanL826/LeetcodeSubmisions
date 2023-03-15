@@ -6,7 +6,7 @@
 
 using namespace std;
 
-//  Definition for singly-linked list.
+//  Define node of singly-linked list.
 struct ListNode {
     int val;
     ListNode *next;
@@ -18,24 +18,17 @@ struct ListNode {
 class Solution {
 public:
     Solution(ListNode* head) {
-        //this->head = head;
         ListNode* curNode = head;
-        //cout << "head address: " << head << endl;        
         while (curNode != nullptr){         
-            //cout << curNode->val << endl;
             values.push_back(curNode);
             curNode = curNode->next;
         }
-        //cout << "(after) head address: " << head << endl;        
     }
     int getRandom() {
-        //srand((unsigned) time(NULL));
-        //cout << "head address from getRandom(): " << head << endl;
         int index = rand() % values.size();
         return values[index]->val;
     }
-private:
-    //ListNode* head = nullptr;
+private:    
     vector<ListNode*> values;
     
 };
