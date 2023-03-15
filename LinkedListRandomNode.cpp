@@ -18,7 +18,7 @@ struct ListNode {
 class Solution {
 public:
     Solution(ListNode* head) {
-        this->head = head;
+        //this->head = head;
         ListNode* curNode = head;
         //cout << "head address: " << head << endl;        
         while (curNode != nullptr){         
@@ -35,7 +35,7 @@ public:
         return values[index]->val;
     }
 private:
-    ListNode* head = nullptr;
+    //ListNode* head = nullptr;
     vector<ListNode*> values;
     
 };
