@@ -1,1 +1,4 @@
-.vscode/settings.json
+# vsCode settings files
+*.json
+# C++ executable file.
+*.exe
