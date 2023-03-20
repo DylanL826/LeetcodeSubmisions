@@ -59,8 +59,9 @@ public:
         for (int i = 0; i < numDigits; i++){  
             // TODO: Check speed & memory improvement after removing
             // ... temp variable          
-            temp = num3 % int(pow(10,i+1));
-            temp = temp / int(pow(10, i));            
+            // TODO: Could remove one pow() by shifting first and then num3 & 10.
+            temp = num3 % int(pow(10,i+1)); // Remove digits left of i'th digit.
+            temp = temp / int(pow(10, i)); // Shift i'th digit to ones place.           
             node->val = temp;
             // TODO: Cheaper way to do this than checking every iteration?
             (i<numDigits-1) ? node->next = new ListNode(): node->next = nullptr;            
