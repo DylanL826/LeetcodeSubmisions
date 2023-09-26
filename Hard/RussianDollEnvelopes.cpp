@@ -14,10 +14,7 @@ public:
         // Get largest x & y dimensions across all the envelopes.
         int maxX = 0;
         int maxY = 0;
-        // exists[i][j] = 1 if an envelope exists of dimension (i,j), else 0.
-        int** exists = new int*[maxX+1];
-        // M[i][j] = max number of envelopes you can fit in dimensions (i,j)
-        int** M = new int*[maxX+1];
+        
         for (auto i = 0; i < envelopes.size(); i++){
             if(envelopes[i][0] > maxX){
                 maxX = envelopes[i][0];
@@ -26,6 +23,10 @@ public:
                 maxY = envelopes[i][1];
             }
         }
+        // exists[i][j] = 1 if an envelope exists of dimension (i,j), else 0.
+        int** exists = new int*[maxX+1];
+        // M[i][j] = max number of envelopes you can fit in dimensions (i,j)
+        int** M = new int*[maxX+1];
         
         // Declare 'exists' and 'M' matrices
         for (auto i = 0; i <= maxX; i++)
@@ -49,7 +50,6 @@ public:
             exists[envelopes[i][0]][envelopes[i][1]] = 1;
             //M[envelopes[i][0]][envelopes[i][1]] = 1;
         }
-        printGrid(exists, maxX, maxY);
         // At each element of M, propagate the cells solution to (i+1) & (j+1)
         // for each pair of dimensions.
         for (int i = 1; i <= maxX; ++i)
@@ -74,7 +74,7 @@ public:
                         M[i][j+1] = M[i][j];
                     }
                 }
-                printGrid(M, maxX, maxY);
+                //printGrid(M, maxX, maxY);
             }
             
         }
@@ -91,6 +91,7 @@ public:
         return M[maxX][maxY];
     }
 
+    // Print values of dynamic matrix
     void printGrid(int** M, int maxX, int maxY){
         cout << endl;
         for (auto i = 0; i <= maxX; i++)
@@ -141,6 +142,12 @@ int main() {
     envelopes.push_back(vector<int>{10,7});
     envelopes.push_back(vector<int>{15,9});
     envelopes.push_back(vector<int>{12,8});
+    envelopes.push_back(vector<int>{1,2});
+    envelopes.push_back(vector<int>{1,2});
+    envelopes.push_back(vector<int>{4,8});
+    envelopes.push_back(vector<int>{4,8});
+    envelopes.push_back(vector<int>{4,150});
+    envelopes.push_back(vector<int>{200,150});
     num = obj->maxEnvelopes(envelopes);
     cout << num << endl;
     return 0;
