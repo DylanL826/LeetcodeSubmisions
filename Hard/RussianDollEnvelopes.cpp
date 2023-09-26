@@ -67,7 +67,7 @@ public:
                     }
                 }
                 // Check if not on MaxY edge of matrix before indexing (y+1) neighbor.
-                if(i != maxY){
+                if(j != maxY){
                     // Propagate this cells solution if it's better than 
                     //its neighbors solution
                     if(M[i][j] > M[i][j+1]){
@@ -131,7 +131,7 @@ public:
 };
 
 int main() {
-    Solution* obj;
+    Solution* obj = new Solution();
     int num = -1;
     vector<vector<int>> envelopes;
     envelopes.push_back(vector<int>{5,4});
