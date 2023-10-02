@@ -19,28 +19,28 @@ public:
         // Matrix of optimal solutions. 
         int** M;
         // Dimensions of largest envelope in solution sequence at [i][j] dimensions.
-        pair<int,int>** largest;
-        
-        for (auto i = 0; i < envelopes.size(); i++){
-            if(envelopes[i][0] > maxX){
+        pair<int, int>** largest;
+
+        for (auto i = 0; i < envelopes.size(); i++) {
+            if (envelopes[i][0] > maxX) {
                 maxX = envelopes[i][0];
             }
-            if(envelopes[i][1] > maxY){
+            if (envelopes[i][1] > maxY) {
                 maxY = envelopes[i][1];
             }
         }
         // exists[i][j] = 1 if an envelope exists of dimension (i,j), else 0.
-        exists = new int*[maxX+1];
+        exists = new int* [maxX + 1];
         // M[i][j] = max number of envelopes you can fit in dimensions (i,j)
-        M = new int*[maxX+1];
-        largest = new pair<int,int>*[maxX+1];
+        M = new int* [maxX + 1];
+        largest = new pair<int, int>* [maxX + 1];
 
         // Declare 'exists' and 'M' matrices
         for (auto i = 0; i <= maxX; i++)
         {
-            exists[i] = new int[maxY+1];
-            M[i] = new int[maxY+1];
-            largest[i] = new pair<int,int>[maxX+1];
+            exists[i] = new int[maxY + 1];
+            M[i] = new int[maxY + 1];
+            largest[i] = new pair<int, int>[maxX + 1];
         }
         // Assign 0 to all elements in 'exists' and 'M' 
         for (auto i = 0; i <= maxX; i++)
@@ -52,7 +52,7 @@ public:
                 largest[i][j].first = 0;
                 largest[i][j].second = 0;
             }
-            
+
         }
         // Update exists & M matrices at indeces where an envelope exists.
         for (auto i = 0; i < envelopes.size(); i++)
@@ -62,6 +62,8 @@ public:
         }
         // At each element of M, propagate the cells solution to (i+1) & (j+1)
         // for each pair of dimensions.
+        int topSolution = 0;
+        int leftSolution = 0;
         for (int i = 1; i <= maxX; ++i)
         {
             for (int j = 1; j <= maxY; ++j)
@@ -69,47 +71,62 @@ public:
 
                 // If an envelope exists @ (i,j) and it will contain largest...
                 // ...envelope of the sequence, update this cell.
-                if(exists[i][j] == 1){
-                    // Needs to be M[i][j] comparison here before comparing 
-                    // largest[i][j] to i & j.
-                    /*
-                        Logic is by only chde
-                    */
-                    if(largest[i][j].first < i && largest[i][j].second < j){
-                        // Update largest envelope in solution sequence to this one.
-                        largest[i][j].first = i;
-                        largest[i][j].second = j;
-
-                        // Update max num envlopes.
-                        M[i][j] += exists[i][j];
+                if (exists[i][j] == 1) {
+                    // If top neighbor solution can use [i,j], increase topSolution value.
+                    if (largest[i-1][j].first < i && largest[i-1][j].second < j) {
+                        topSolution = M[i - 1][j] + 1;
                     }
-
+                    else
+                    {
+                        topSolution = M[i - 1][j];
+                    }
+                    // If left neighbor solution can use [i,j], increase leftSolution value.
+                    if (largest[i][j-1].first < i && largest[i][j - 1].second < j) {
+                        leftSolution = M[i][j-1] + 1;
+                    }
+                    else
+                    {
+                        leftSolution = M[i][j-1];
+                    }
+                    // Compare top & left solution values to decide at solution path intersections.
+                    // If topSolution better, update subsolution (i,j) with solution of (i-1,j)
+                    if (topSolution > leftSolution) {
+                        M[i][j] = M[i - 1][j] + 1;
+                        largest[i][j] = largest[i - 1][j];
+                    }
+                    // If topSolution better, update subsolution (i,j) with solution of (i-1,j)
+                    // TODO: Consider case where [i,j] is not used in solution path.
+                    else{
+                        M[i][j] = M[i][j - 1];
+                        largest[i][j] = largest[i][j - 1];
+                    }
                 }
                 // Propagate solution
                 // Check if not on maxX edge of matrix before indexing (x+1) neighbor.
-                if(i != maxX){
+                if (i != maxX) {
                     // Propagate this cells solution if it's better than
                     //its neighbors solution
-                    if(M[i][j] >  M[i+1][j]){
-                        M[i+1][j] = M[i][j];
-                        largest[i+1][j].first = largest[i][j].first;
-                        largest[i+1][j].second = largest[i][j].second;
+                    if (M[i][j] > M[i + 1][j]) {
+                        M[i + 1][j] = M[i][j];
+                        largest[i + 1][j].first = largest[i][j].first;
+                        largest[i + 1][j].second = largest[i][j].second;
                     }
                 }
                 // Check if not on MaxY edge of matrix before indexing (y+1) neighbor.
-                if(j != maxY){
+                if (j != maxY) {
                     // Propagate this cells solution if it's better than 
                     //its neighbors solution
-                    if(M[i][j] > M[i][j+1]){
-                        M[i][j+1] = M[i][j];
-                        largest[i][j+1].first = largest[i][j].first;
-                        largest[i][j+1].second = largest[i][j].second;
+                    if (M[i][j] > M[i][j + 1]) {
+                        M[i][j + 1] = M[i][j];
+                        largest[i][j + 1].first = largest[i][j].first;
+                        largest[i][j + 1].second = largest[i][j].second;
                     }
                 }
+                cout << "\ni: " << i << " j: " << j << endl;
                 printGrid(M, maxX, maxY);
-                //printEnvGrid(largest, maxX, maxY);
+                printEnvGrid(largest, maxX, maxY);
             }
-            
+
         }
         // Get envelope sequence from backtracing. 
         // if(M[i-1][j] + exists[i-1][j] == M[i][j]) // (x-1) neighbor in optimal path.
@@ -129,49 +146,51 @@ public:
     }
 
     // Print values of dynamic matrix
-    void printGrid(int** M, int maxX, int maxY){
+    void printGrid(int** M, int maxX, int maxY) {
         cout << endl;
-        for (auto i = 0; i <= maxX; i++)
+        cout << "M grid: " << endl;
+        for (auto i = 1; i <= maxX; i++)
         {
-            for (auto j = 0; j <= maxY; j++)
+            for (auto j = 1; j <= maxY; j++)
             {
                 cout << " " << M[i][j];
             }
             cout << endl;
         }
-        
+
     }
 
-    void printEnvGrid(pair<int,int>** largest, int maxX, int maxY){
+    void printEnvGrid(pair<int, int>** largest, int maxX, int maxY) {
         cout << endl;
-        for (auto i = 0; i <= maxX; ++i)
+        cout << "largest grid : " << endl;
+        for (auto i = 1; i <= maxX; ++i)
         {
-            for (auto j = 0; j <= maxY; ++j)
+            for (auto j = 1; j <= maxY; ++j)
             {
                 cout << "  (" << largest[i][j].first << "," << largest[i][j].second << ")";
             }
             cout << endl;
         }
-        
+
     }
-    
+
     // Return optimal sequence of envelopes 
-    vector<vector<int>> getEnvelopeSeq(int** M, int maxX, int maxY){
+    vector<vector<int>> getEnvelopeSeq(int** M, int maxX, int maxY) {
         int i = maxX;
         int j = maxY;
         vector<vector<int>> sequence;
-        sequence.push_back(vector<int>{i,j});
-        while(i + j > 0){
+        sequence.push_back(vector<int>{i, j});
+        while (i + j > 0) {
             // If cur val != neighbor vals, record envelope
-            if(i > 0){
-                if(M[i][j] > M[i-1][j]){
+            if (i > 0) {
+                if (M[i][j] > M[i - 1][j]) {
 
                 }
             }
             // If not on either edge, compare top and left neighbors
-            if(i * j > 0){
+            if (i * j > 0) {
                 // If left neig. > top neig. move left
-                if(M[i-1][j] > M[i][j-1]){
+                if (M[i - 1][j] > M[i][j - 1]) {
                     i--;
                 }
             }
