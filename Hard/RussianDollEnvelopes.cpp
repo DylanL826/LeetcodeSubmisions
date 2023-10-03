@@ -40,7 +40,7 @@ public:
         {
             exists[i] = new int[maxY + 1];
             M[i] = new int[maxY + 1];
-            largest[i] = new pair<int, int>[maxX + 1];
+            largest[i] = new pair<int, int>[maxY + 1];
         }
         // Assign 0 to all elements in 'exists' and 'M' 
         for (auto i = 0; i <= maxX; i++)
