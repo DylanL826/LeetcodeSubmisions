@@ -38,9 +38,9 @@ public:
         // Declare 'exists' and 'M' matrices
         for (auto i = 0; i <= maxX; i++)
         {
-            exists[i] = new int[maxY + 1];
-            M[i] = new int[maxY + 1];
-            largest[i] = new pair<int, int>[maxY + 1];
+            exists[i] =     new int[maxY + 1];
+            M[i] =          new int[maxY + 1];
+            largest[i] =    new pair<int, int>[maxY + 1];
         }
         // Assign 0 to all elements in 'exists' and 'M' 
         for (auto i = 0; i <= maxX; i++)
@@ -52,7 +52,6 @@ public:
                 largest[i][j].first = 0;
                 largest[i][j].second = 0;
             }
-
         }
         // Update exists & M matrices at indeces where an envelope exists.
         for (auto i = 0; i < envelopes.size(); i++)
@@ -97,15 +96,16 @@ public:
                     // Compare top & left solution values to decide at solution path intersections.
                     // If topSolution better, update subsolution (i,j) with solution of (i-1,j)
                     if (topSolution > leftSolution) {
-                        M[i][j] = M[i - 1][j] + 1;
                         // If the (i,j) envelope is usable, update largest(i,j)
                         if (topCanUseIJEnv) {
+                            M[i][j] = M[i - 1][j] + 1;
                             largest[i][j].first = i;
                             largest[i][j].second = j;
                         }
                         // top solution path is better, but cannot use (i,j) envelope
                         else{
                             largest[i][j] = largest[i - 1][j];
+                            M[i][j] = M[i - 1][j];
                         }
                     }
                     // If leftSolution better, update subsolution (i,j) with solution of (i-1,j)
@@ -237,11 +237,42 @@ int main() {
     Solution* obj = new Solution();
     int num = -1;
     vector<vector<int>> envelopes;
-    envelopes.push_back(vector<int>{6, 10});
+    // Test Case 1
+    /*envelopes.push_back(vector<int>{5, 4});
+    envelopes.push_back(vector<int>{6, 4});
+    envelopes.push_back(vector<int>{6, 7});
+    envelopes.push_back(vector<int>{2, 3});*/
+    
+    // Test Case 3
+    /*envelopes.push_back(vector<int>{6, 10});
     envelopes.push_back(vector<int>{11, 14});
     envelopes.push_back(vector<int>{6, 1});
     envelopes.push_back(vector<int>{16, 14});
-    envelopes.push_back(vector<int>{13, 2});
+    envelopes.push_back(vector<int>{13, 2});*/
+
+    //[[19,17],[8,14],[11,4],[12,20],[19,13],[3,12],[5,12],[19,9],[20,3],
+    // [11,19],[20,20],[7,14],[9,13],[2,8],[20,7],[16,6],[16,3],[10,2],[4,6],[3,17]]
+    // Test Case 3: (answer 5)
+    envelopes.push_back(vector<int>{19, 17});
+    envelopes.push_back(vector<int>{8, 14});
+    envelopes.push_back(vector<int>{11, 4});
+    envelopes.push_back(vector<int>{12, 20});
+    envelopes.push_back(vector<int>{19, 13});
+    envelopes.push_back(vector<int>{3, 12});
+    envelopes.push_back(vector<int>{5, 12});
+    envelopes.push_back(vector<int>{19, 9});
+    envelopes.push_back(vector<int>{20, 3});
+    envelopes.push_back(vector<int>{11, 19});
+    envelopes.push_back(vector<int>{20, 20});
+    envelopes.push_back(vector<int>{7, 14});
+    envelopes.push_back(vector<int>{9, 13});
+    envelopes.push_back(vector<int>{2, 8});
+    envelopes.push_back(vector<int>{20, 7});
+    envelopes.push_back(vector<int>{16, 6});
+    envelopes.push_back(vector<int>{16, 3});
+    envelopes.push_back(vector<int>{10, 2});
+    envelopes.push_back(vector<int>{4, 6});
+    envelopes.push_back(vector<int>{3, 7});
     num = obj->maxEnvelopes(envelopes);
     cout << num << endl;
     return 0;
