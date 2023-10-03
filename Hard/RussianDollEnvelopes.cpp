@@ -64,6 +64,8 @@ public:
         // for each pair of dimensions.
         int topSolution = 0;
         int leftSolution = 0;
+        bool topCanUseIJEnv = false;
+        bool leftCanUseIJEnv = false;
         for (int i = 1; i <= maxX; ++i)
         {
             for (int j = 1; j <= maxY; ++j)
@@ -74,54 +76,86 @@ public:
                 if (exists[i][j] == 1) {
                     // If top neighbor solution can use [i,j], increase topSolution value.
                     if (largest[i-1][j].first < i && largest[i-1][j].second < j) {
+
                         topSolution = M[i - 1][j] + 1;
+                        topCanUseIJEnv = true;
                     }
                     else
                     {
                         topSolution = M[i - 1][j];
+                        topCanUseIJEnv = false;
                     }
                     // If left neighbor solution can use [i,j], increase leftSolution value.
                     if (largest[i][j-1].first < i && largest[i][j - 1].second < j) {
                         leftSolution = M[i][j-1] + 1;
+                        leftCanUseIJEnv = true;
                     }
-                    else
-                    {
+                    else{
                         leftSolution = M[i][j-1];
+                        leftCanUseIJEnv = false;
                     }
                     // Compare top & left solution values to decide at solution path intersections.
                     // If topSolution better, update subsolution (i,j) with solution of (i-1,j)
                     if (topSolution > leftSolution) {
                         M[i][j] = M[i - 1][j] + 1;
+                        // If the (i,j) envelope is usable, update largest(i,j)
+                        if (topCanUseIJEnv) {
+                            largest[i][j].first = i;
+                            largest[i][j].second = j;
+                        }
+                        // top solution path is better, but cannot use (i,j) envelope
+                        else{
+                            largest[i][j] = largest[i - 1][j];
+                        }
+                    }
+                    // If leftSolution better, update subsolution (i,j) with solution of (i-1,j)
+                    else{
+                        if (leftCanUseIJEnv) {
+                            largest[i][j].first = i;
+                            largest[i][j].second = j;
+                            M[i][j] = M[i][j - 1] + 1;
+                        }
+                        else {
+                            // If left solution is better but it cannot use
+                            // (i,j) envelope, copy largest(i,j-1).
+                            largest[i][j] = largest[i][j - 1];
+                            M[i][j] = M[i][j - 1];
+                        }
+                    }
+                }
+                // No (i,j) envelope, just compare top and left neighbor solution values
+                // to update subsolution (i,j)
+                else {
+                    if (M[i - 1][j] > M[i][j - 1]) {
+                        M[i][j] = M[i - 1][j];
                         largest[i][j] = largest[i - 1][j];
                     }
-                    // If topSolution better, update subsolution (i,j) with solution of (i-1,j)
-                    // TODO: Consider case where [i,j] is not used in solution path.
-                    else{
+                    else {
                         M[i][j] = M[i][j - 1];
                         largest[i][j] = largest[i][j - 1];
                     }
                 }
-                // Propagate solution
-                // Check if not on maxX edge of matrix before indexing (x+1) neighbor.
-                if (i != maxX) {
-                    // Propagate this cells solution if it's better than
-                    //its neighbors solution
-                    if (M[i][j] > M[i + 1][j]) {
-                        M[i + 1][j] = M[i][j];
-                        largest[i + 1][j].first = largest[i][j].first;
-                        largest[i + 1][j].second = largest[i][j].second;
-                    }
-                }
-                // Check if not on MaxY edge of matrix before indexing (y+1) neighbor.
-                if (j != maxY) {
-                    // Propagate this cells solution if it's better than 
-                    //its neighbors solution
-                    if (M[i][j] > M[i][j + 1]) {
-                        M[i][j + 1] = M[i][j];
-                        largest[i][j + 1].first = largest[i][j].first;
-                        largest[i][j + 1].second = largest[i][j].second;
-                    }
-                }
+                //// Propagate solution
+                //// Check if not on maxX edge of matrix before indexing (x+1) neighbor.
+                //if (i != maxX) {
+                //    // Propagate this cells solution if it's better than
+                //    //its neighbors solution
+                //    if (M[i][j] > M[i + 1][j]) {
+                //        M[i + 1][j] = M[i][j];
+                //        largest[i + 1][j].first = largest[i][j].first;
+                //        largest[i + 1][j].second = largest[i][j].second;
+                //    }
+                //}
+                //// Check if not on MaxY edge of matrix before indexing (y+1) neighbor.
+                //if (j != maxY) {
+                //    // Propagate this cells solution if it's better than 
+                //    //its neighbors solution
+                //    if (M[i][j] > M[i][j + 1]) {
+                //        M[i][j + 1] = M[i][j];
+                //        largest[i][j + 1].first = largest[i][j].first;
+                //        largest[i][j + 1].second = largest[i][j].second;
+                //    }
+                //}
                 cout << "\ni: " << i << " j: " << j << endl;
                 printGrid(M, maxX, maxY);
                 printEnvGrid(largest, maxX, maxY);
