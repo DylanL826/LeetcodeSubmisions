@@ -15,6 +15,8 @@ public:
         int maxX = 0;
         int maxY = 0;
         // Binary matrix if an envelope exists at [i][j] dimensions.
+        // TODO: exists is a very sparse matrix. Could replace exists[i][j]
+        // ...with a search of envelopes vector.
         int** exists;
         // Matrix of optimal solutions. 
         int** M;
