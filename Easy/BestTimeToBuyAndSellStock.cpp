@@ -15,7 +15,11 @@ public:
                 if(tempProfit > profit){
                     profit = tempProfit;
                 }
+                //If prices[j+1] < prices[j], skip it
+                while(prices[j+1]<prices[j] && j < prices.size()) j++;
             }
+            // If prices[i+1] > prices[i], skip it
+            while(prices[i+1]>prices[i] && i < prices.size()-1) i++;
         }
         return profit;    
     }
@@ -26,6 +30,6 @@ int main() {
     Solution sol = Solution();
     vector<int> test1({7,1,5,3,6,4});
     vector<int> test2({7,6,4,3,1});
-    cout << sol.maxProfit(test2) << endl;
+    cout << sol.maxProfit(test1) << endl;
     return 0;
 }
