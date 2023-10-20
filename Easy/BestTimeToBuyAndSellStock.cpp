@@ -25,6 +25,26 @@ public:
         }
         return profit;    
     }
+
+    // Implement tabulated dynamic programming solution
+    int DPMaxProfit(vector<int>& prices){
+        vector<int> maxPrices = vector<int>(prices.size()-1, 0);
+        for (auto i = prices.size()-2; i>=0; i--)
+        {
+            if(prices[i]>maxPrices[i+1])
+                maxPrices[i] = prices[i];
+            else
+                maxPrices[i] = maxPrices[i+1];
+        }
+        int maxProfit = 0;
+        for (auto i = 0; i < prices.size(); i++)
+        {
+            if(prices[i] - maxPrices[i] > maxProfit){
+                maxProfit = prices[i] - maxPrices[i];
+            }
+        }
+        
+    }
 };
 
 
