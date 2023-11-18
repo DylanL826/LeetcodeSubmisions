@@ -20,17 +20,20 @@ public:
             //subStr = s.substr(j,curMax);
             // Search substring for i'th character
             if(subStr.find(s[i]) != string::npos){
-                // i'th Character found in substring, reset at i'th character
-                j = i;
-                subStr = s.substr(i,1);
-                curMax = 1;
+                // i'th Character found in substring, increment j and recheck
+                // ... until at single character or i'th character not in new substr
+                while (j<=i && subStr.find(s[i]) != string::npos)
+                {
+                    j++;
+                    curMax--;
+                    subStr = s.substr(j, i-j);
+                }   
             }
-            else{
-                // character not in substring, add i'th character to substring
-                subStr = s.substr(j, i-j+1);
-                curMax++;
-                maxSubstring = max(maxSubstring, curMax);
-            }
+            // character not in substring, add i'th character to substring
+            subStr = s.substr(j, i-j+1);
+            curMax++;
+            maxSubstring = max(maxSubstring, curMax);
+            
         }
         return maxSubstring;
     }
