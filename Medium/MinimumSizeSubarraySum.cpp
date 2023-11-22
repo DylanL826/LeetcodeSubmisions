@@ -5,16 +5,24 @@
 
 using namespace std;
 
+/*
+    TODO: clean up logic
+    1.) Remove end < nums.size()-1, used to compensate 
+    2.) Remove break statement
+*/ 
 class Solution {
 public:
     int minSubArrayLen(int target, vector<int>& nums) {
-        int minLength = nums.size(), curLength = 1, start = 0, end = 0, curSum = nums[start];
-        // Slidg 
-        while(end < nums.size()-1){
-            if(curSum < target){ // if under target, add end number.
+        int minLength = nums.size()+1, curLength = 1, start = 0, end = 0, curSum = nums[start];
+        // Sliding windows approach
+        while(end < nums.size()){
+            if(curSum < target && end < nums.size()-1){ // if under target, add end number.
                 curSum += nums[++end];
                 curLength++;
-            } else { // if at least target, record length then remove start number
+            }
+            /* if at or above target, record length and remove start 
+                ...numbers until back under target or at single element. */
+            while(start <= end && curSum >= target){
                 minLength = min(minLength, curLength);
                 // Avoid start pointer from crossing end in single element subarray case.
                 if(minLength == 1){
@@ -23,6 +31,13 @@ public:
                 curSum -= nums[start++];
                 curLength--;
             }
+            if(end == nums.size()-1){ // Gross break required to compensate for busted logic.
+                break;
+            }
+        }
+        // If using all elements doesn't meet target, return 0.
+        if(minLength == nums.size()+1){
+            return 0;
         }
         return minLength;
     }
@@ -33,7 +48,19 @@ int main(){
     Solution sol;
     int t1 = 7;
     vector<int> nums1{2, 2, 1, 2, 4, 3};
+    int t2 = 4;
+    vector<int> nums2{1, 4, 4};
+    int t3 = 11;
+    vector<int> nums3{1,1,1,1,1,1,1,1};
+    int t4 = 15;
+    vector<int> nums4{1,2,3,4,5};
+    int t5 = 7;
+    vector<int> nums5{8};
 
-    cout << sol.minSubArrayLen(t1, nums1);
+    cout << sol.minSubArrayLen(t1, nums1) << endl;
+    cout << sol.minSubArrayLen(t2, nums2) << endl;
+    cout << sol.minSubArrayLen(t3, nums3) << endl;
+    cout << sol.minSubArrayLen(t4, nums4) << endl;
+    cout << sol.minSubArrayLen(t5, nums5) << endl;
     return 0;
 }
