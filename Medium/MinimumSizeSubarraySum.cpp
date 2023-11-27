@@ -24,14 +24,21 @@ public:
                 ...numbers until back under target or at single element. */
             while(start <= end && curSum >= target){
                 minLength = min(minLength, curLength);
-                // Avoid start pointer from crossing end in single element subarray case.
+                // End early condition.
                 if(minLength == 1){
                     return 1;
                 }
                 curSum -= nums[start++];
                 curLength--;
             }
-            if(end == nums.size()-1){ // Gross break required to compensate for busted logic.
+            /* This break statement can't be removed by changing the while condition
+                to end < nums.size()-1 because it won't iterate through substrings 
+                with end=last character. Failing test case 1.
+                If we remove this break and keep the while condition the same,
+                there is an infinite loop at end=last character since (end > nums.size()-1)
+                  and (curSum < target).
+            */
+            if(end == nums.size()-1){ 
                 break;
             }
         }
