@@ -24,9 +24,8 @@ public:
             while(curSum >= target){
                 minLength = min(minLength, end-start+1);
                 // End early condition.
-                if(minLength == 1){
+                if(minLength == 1)
                     return 1;
-                }
                 curSum -= nums[start++];
             }
         }
