@@ -13,23 +13,21 @@ using namespace std;
 class Solution {
 public:
     int minSubArrayLen(int target, vector<int>& nums) {
-        int minLength = nums.size()+1, curLength = 1, start = 0, curSum = 0;
+        int minLength = nums.size()+1, start = 0, curSum = 0;
         // Sliding windows approach
         for(int end =0; end < nums.size(); end++){
             if(curSum < target){ // if under target, add end number.
                 curSum += nums[end];
-                curLength++;
             }
             /* if at or above target, record length and remove start 
                 ...numbers until back under target or at single element. */
             while(curSum >= target){
-                minLength = min(minLength, curLength);
+                minLength = min(minLength, start-end+1);
                 // End early condition.
                 if(minLength == 1){
                     return 1;
                 }
                 curSum -= nums[start++];
-                curLength--;
             }
         }
         // If using all elements doesn't meet target, return 0.
