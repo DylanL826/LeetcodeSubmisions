@@ -22,7 +22,7 @@ public:
             /* if at or above target, record length and remove start 
                 ...numbers until back under target or at single element. */
             while(curSum >= target){
-                minLength = min(minLength, start-end+1);
+                minLength = min(minLength, end-start+1);
                 // End early condition.
                 if(minLength == 1){
                     return 1;
