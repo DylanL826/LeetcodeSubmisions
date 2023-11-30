@@ -16,9 +16,8 @@ public:
         int minLength = nums.size()+1, start = 0, curSum = 0;
         // Sliding windows approach
         for(int end =0; end < nums.size(); end++){
-            if(curSum < target){ // if under target, add end number.
+            if(curSum < target) // if under target, add end number.
                 curSum += nums[end];
-            }
             /* if at or above target, record length and remove start 
                 ...numbers until back under target or at single element. */
             while(curSum >= target){
