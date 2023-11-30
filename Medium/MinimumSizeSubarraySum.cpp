@@ -13,16 +13,16 @@ using namespace std;
 class Solution {
 public:
     int minSubArrayLen(int target, vector<int>& nums) {
-        int minLength = nums.size()+1, curLength = 1, start = 0, end = 0, curSum = nums[start];
+        int minLength = nums.size()+1, curLength = 1, start = 0, curSum = 0;
         // Sliding windows approach
-        while(end < nums.size()){
-            if(curSum < target && end < nums.size()-1){ // if under target, add end number.
-                curSum += nums[++end];
+        for(int end =0; end < nums.size(); end++){
+            if(curSum < target){ // if under target, add end number.
+                curSum += nums[end];
                 curLength++;
             }
             /* if at or above target, record length and remove start 
                 ...numbers until back under target or at single element. */
-            while(start <= end && curSum >= target){
+            while(curSum >= target){
                 minLength = min(minLength, curLength);
                 // End early condition.
                 if(minLength == 1){
@@ -30,16 +30,6 @@ public:
                 }
                 curSum -= nums[start++];
                 curLength--;
-            }
-            /* This break statement can't be removed by changing the while condition
-                to end < nums.size()-1 because it won't iterate through substrings 
-                with end=last character. Failing test case 1.
-                If we remove this break and keep the while condition the same,
-                there is an infinite loop at end=last character since (end > nums.size()-1)
-                  and (curSum < target).
-            */
-            if(end == nums.size()-1){ 
-                break;
             }
         }
         // If using all elements doesn't meet target, return 0.
