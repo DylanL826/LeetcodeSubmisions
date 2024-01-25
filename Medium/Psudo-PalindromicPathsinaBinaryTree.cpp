@@ -31,16 +31,17 @@ public:
 void makePath(TreeNode* node, vector<int> curPath, vector<vector<int>> &paths){
     // Add the current node's value to curPath
     curPath.push_back(node->val);
-    // If at leaf node, return curPath
+    // If at leaf node, the path is complete, return curPath
     if(node->left == nullptr && node->right == nullptr){
         paths.push_back(curPath);
         return;
     }
-    if(node->left != nullptr){
-        makePath(node->left, curPath, paths);
-    }
-    if(node->right != nullptr){
-        makePath(node->right, curPath, paths);
+    // Else continue to child nodes.
+    else{
+        if(node->left != nullptr)
+            makePath(node->left, curPath, paths);
+        if(node->right != nullptr)
+            makePath(node->right, curPath, paths);
     }
 }
 // Sub-problem of original LC problem. Detect if given string is a pseudo-palidrome.
