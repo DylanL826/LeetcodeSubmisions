@@ -7,6 +7,7 @@ https://leetcode.com/problems/pseudo-palindromic-paths-in-a-binary-tree/descript
 */
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -23,18 +24,33 @@ struct TreeNode {
 class Solution {
 public:
     int pseudoPalindromicPaths (TreeNode* root) {
-        
+        //TODO: Traverse binary tree and construct a set for each path.
     }
 };
-
+// Recursive helper function to generate the root-to-leaf paths in a tree.
+void makePath(TreeNode* node, vector<int> curPath, vector<vector<int>> &paths){
+    // Add the current node's value to curPath
+    curPath.push_back(node->val);
+    // If at leaf node, return curPath
+    if(node->left == nullptr && node->right == nullptr){
+        paths.push_back(curPath);
+        return;
+    }
+    if(node->left != nullptr){
+        makePath(node->left, curPath, paths);
+    }
+    if(node->right != nullptr){
+        makePath(node->right, curPath, paths);
+    }
+}
 // Sub-problem of original LC problem. Detect if given string is a pseudo-palidrome.
-bool pseudoPalidrome(int nums[3]){
+bool pseudoPalidrome(int nums[], int size){
     // Only need to track character frequencies.
     // At most 1 character can appear an odd number of times.
     // Count frequency for each digit in string.
     int freqs[9]={0};
-    for(int i=0; i<3; ++i){
-        freqs[nums[i]-1]++;
+    for(int i=0; i<size; ++i){
+        freqs[--nums[i]]++;
     }
     int numOdds = 0;
     for (int i = 0; i < 9; ++i){
@@ -47,7 +63,21 @@ bool pseudoPalidrome(int nums[3]){
 }
 
 int main(){
-    int nums1[3] = {2,1,2};
-    pseudoPalidrome(nums1);
+    int nums1[10] = {2,1,2,3,3,3,3,4,4,1};
+    // Leaf nodes
+    TreeNode* leaf1 = new TreeNode(3);
+    TreeNode* leaf2 = new TreeNode(1);
+    TreeNode* leaf3 = new TreeNode(1);
+
+    // Child nodes
+    TreeNode* lChild = new TreeNode(3, leaf1, leaf2);
+    TreeNode* rChild = new TreeNode(1,nullptr, leaf3);
+
+    // Root node
+    TreeNode* root = new TreeNode(2, lChild, rChild);
+    //pseudoPalidrome(nums1, 10);
+    vector<int> path;
+    vector<vector<int>> paths;
+    makePath(root, path, paths);
     return 1;
 }
