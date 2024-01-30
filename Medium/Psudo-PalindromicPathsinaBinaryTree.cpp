@@ -21,10 +21,10 @@ struct TreeNode {
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
  
+ //TODO: MLE for large trees.
 class Solution {
 public:
     int pseudoPalindromicPaths (TreeNode* root) {
-        //TODO: Traverse binary tree and construct a set for each path.
         vector<int> path;
         vector<vector<int>> paths;
         makePath(root, path, paths);
@@ -37,6 +37,7 @@ public:
         }
         return numPsuedoPalindromes;
     }
+    // TODO: Pass curPath by reference to reduce memory usage in large trees.
     // Recursively generate set of root-to-leaf paths from a binary tree.
     void makePath(TreeNode* node, vector<int> curPath, vector<vector<int>> &paths){
         // Add the current node's value to curPath
