@@ -54,7 +54,7 @@ public:
                 makePath(node->right, curPath, paths);
         }
     }  
-    // Sub-problem of original LC problem. Detect if given string is a pseudo-palidrome.
+    // Detect if given set of numbers is a pseudo-palidrome.
     bool pseudoPalidrome(vector<int> nums){
         // Only need to track character frequencies.
         // At most 1 character can appear an odd number of times.
