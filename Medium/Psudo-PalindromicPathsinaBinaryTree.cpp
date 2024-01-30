@@ -91,10 +91,23 @@ int main(){
     // Root node
     TreeNode* root = new TreeNode(2, lChild, rChild);
     //pseudoPalidrome(nums1, 10);
+
+    // Tree 2
+    TreeNode* llNode = new TreeNode(1);
+    TreeNode* lrrNode = new TreeNode(1);
+    TreeNode* rNode = new TreeNode(1);
+    TreeNode* lrNode = new TreeNode(3, nullptr, lrrNode);
+    TreeNode* lNode = new TreeNode(3, llNode, lrNode);
+    TreeNode* root2 = new TreeNode(3, lNode, rNode);
+
+    // Tree3
+    TreeNode* root3 = new TreeNode(9);
+
+
     Solution sol;
     vector<int> path;
     vector<vector<int>> paths;
-    sol.pseudoPalindromicPaths(root);
+    sol.pseudoPalindromicPaths(root3);
     
     //cout << "Num paths that are pseudopalindromes: " << numPsuedoPalindromes << endl;
     
