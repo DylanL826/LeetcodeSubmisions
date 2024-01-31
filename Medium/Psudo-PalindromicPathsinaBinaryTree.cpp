@@ -39,20 +39,30 @@ public:
     }
     // TODO: Pass curPath by reference to reduce memory usage in large trees.
     // Recursively generate set of root-to-leaf paths from a binary tree.
-    void makePath(TreeNode* node, vector<int> curPath, vector<vector<int>> &paths){
+    void makePath(TreeNode* node, vector<int> &curPath, vector<vector<int>> &paths){
         // Add the current node's value to curPath
         curPath.push_back(node->val);
-        // If at leaf node, the path is complete, return curPath
+        // If at leaf node add completed curPath to list of paths and terminate.
         if(node->left == nullptr && node->right == nullptr){
             paths.push_back(curPath);
             return;
         }
         // Else continue to child nodes.
         else{
-            if(node->left != nullptr)
+            // Only make a copy vector if node has 2 children.
+            if(node->left != nullptr && node->right != nullptr){
+                vector<int> copyPath = curPath;
+                // Give left child original path, give right the copy.
                 makePath(node->left, curPath, paths);
-            if(node->right != nullptr)
-                makePath(node->right, curPath, paths);
+                makePath(node->right, copyPath, paths);
+            }
+            // Only 1 child, pass curPath to the child.
+            else{
+                if(node->left != nullptr)
+                    makePath(node->left, curPath, paths);
+                else
+                    makePath(node->right, curPath, paths);
+            }
         }
     }  
     // Detect if given set of numbers is a pseudo-palidrome.
@@ -108,7 +118,7 @@ int main(){
     Solution sol;
     vector<int> path;
     vector<vector<int>> paths;
-    sol.pseudoPalindromicPaths(root3);
+    sol.pseudoPalindromicPaths(root);
     
     //cout << "Num paths that are pseudopalindromes: " << numPsuedoPalindromes << endl;
     
